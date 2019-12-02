@@ -1,4 +1,4 @@
-package direction;
+package directions;
 
 public class point {
 	public String x = "";
