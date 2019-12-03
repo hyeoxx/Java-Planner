@@ -30,10 +30,12 @@ public class Direction {
 		destPos = dp;
 	}
 	
-	public void getDirection() {
+	public Route getDirection() {
 		// USE GOOGLE DIRECTIONS API
 		String text = "";
-		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&key="+setting.key;
+                Route route = null;
+                
+		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&language=ko&key="+setting.key;
 		try {
 		url = new URL(urls);
 		
@@ -67,14 +69,14 @@ public class Direction {
                                 .get("steps")
                                 .toString()
                 );
-                String departure = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("start_address").toString(); // 출발지 parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("text").toString()
-                String arrival = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("end_address").toString(); // 도착지
-                String distance = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("distance").toString()).getAsJsonObject().get("text").toString(); // 거리
-                String duration = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("duration").toString()).getAsJsonObject().get("text").toString(); // 소요 시간
-                String departure_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("departure_time").toString()).getAsJsonObject().get("text").toString(); // 출발 시간
-                String arrival_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("arrival_time").toString()).getAsJsonObject().get("text").toString(); // 예상 도착 시간
+                String departure = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("start_address").toString().replaceAll("\"", ""); // 출발지 parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("text").toString()
+                String arrival = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("end_address").toString().replaceAll("\"", ""); // 도착지
+                String distance = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("distance").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 거리
+                String duration = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("duration").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 소요 시간
+                String departure_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("departure_time").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 출발 시간
+                String arrival_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("arrival_time").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 예상 도착 시간
                 
-                Route route = new Route(departure, arrival, distance, duration, departure_time, arrival_time);
+                route = new Route(departure, arrival, distance, duration, departure_time, arrival_time);
                 
                 for (int i = 0; i < je3.getAsJsonArray().size(); i++) {
                     JsonElement travel_mode = parser.parse(
@@ -133,6 +135,9 @@ public class Direction {
                                     .toString();
                             break;
                     }
+                    Key = Key.replaceAll("\"", "");
+                    Value = Value.replaceAll("\"", "");
+                    
                     route.add_route(Key, Value);
                     
                     //System.out.println(travel_mode);
@@ -140,6 +145,8 @@ public class Direction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+                
+                return route;
 	}
 	
 }
