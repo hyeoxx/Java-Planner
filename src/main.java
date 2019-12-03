@@ -7,9 +7,8 @@ public class main {
         public static Route route;
         
 	public static void main(String[] args) {
-		// 주의 : 주소 입력 할 때 띄어쓰기 없이 쭉 이어쓰기
 		point a = DirectionFactory.searchPosition("백석대학교"); // 출발지 입력
-		point b = DirectionFactory.searchPosition("학익고등학교"); // 도착지 입력
+		point b = DirectionFactory.searchPosition("서울대"); // 도착지 입력
                 Direction dir = new Direction("ㅇㅇ", a, "dd", b);
                 route = dir.getDirection();
                 
@@ -21,7 +20,7 @@ public class main {
                 System.out.println("총 거리 : "+route.distance);
                 System.out.println("--------------루트------------");
                 for (int i = 0; i < route.getRoutes().size(); i++) {
-                    System.out.println(i+"."+route.getRoutes().keySet().toArray()[i] + " ("+route.getRoutes().values().toArray()[i]+")");
+                    System.out.println((i+1)+". " + route.getRoutes().get(i).split("/")[0] + " ("+route.getRoutes().get(i).split("/")[1]+" 소요)");
                 }
 	}
 

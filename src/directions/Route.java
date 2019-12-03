@@ -5,6 +5,7 @@
  */
 package directions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,8 @@ public class Route {
     public String duration = ""; // 소요 시간
     public String departure_time = ""; // 출발 시간
     public String arrival_time = ""; // 예상 도착 시간
-    public Map<String, String> routes = new HashMap<String, String>(); // Key 어디로 어떻게 가는지, Value 예상 소요 시간
+    //public Map<String, String> routes = new HashMap<String, String>(); // Key 어디로 어떻게 가는지, Value 예상 소요 시간
+    public ArrayList<String> routes = new ArrayList<>();
     
     public Route(String departure_, String arrival_, String distance_, String duration_, String departure_time_, String arrival_time_) {
         this.departure = departure_;
@@ -30,11 +32,11 @@ public class Route {
         this.arrival_time = arrival_time_;
     }
     
-    public void add_route(String key, String value) {
-        routes.put(key, value);
+    public void add_route(String v1) {
+        routes.add(v1);
     }
     
-    public Map<String, String> getRoutes() {
+    public ArrayList<String> getRoutes() {
         return routes;
     }
 }

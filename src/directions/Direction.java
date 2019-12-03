@@ -138,7 +138,7 @@ public class Direction {
                     Key = Key.replaceAll("\"", "");
                     Value = Value.replaceAll("\"", "");
                     
-                    route.add_route(Key, Value);
+                    route.add_route(Key+"/"+Value);
                     
                     //System.out.println(travel_mode);
                 }
