@@ -35,14 +35,11 @@ public class Direction {
 		String text = "";
 		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&key="+setting.key;
 		try {
-			
 		url = new URL(urls);
 		
 		con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET"); // 이 부분은 없어도 상관 없음
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"); // 이 부분은 없어도 상관 없음
-		//con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-		// 접속한 홈페이지에서의 정보를 버퍼에 저장
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
 		br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 			
 		// 버퍼에 저장된 내용을 출력
@@ -51,43 +48,95 @@ public class Direction {
 			text += temp;
                         text += "\n";
 		}
-		
-		//  System.out.println(text);
                 
 		JsonParser parser = new JsonParser();
-		JsonElement jsonArray = parser.parse(text);
+		JsonElement je = parser.parse(text);
                 
-                JsonElement js = parser.parse(
-                        parser.parse(
-                                parser.parse(jsonArray.getAsJsonObject().get("routes").toString())
+                JsonElement je2 = parser.parse(
+                                    parser.parse(je.getAsJsonObject().get("routes").toString())
                                         .getAsJsonArray()
                                         .get(0)
                                         .getAsJsonObject()
                                         .get("legs")
                                         .toString()
-                        ).getAsJsonArray().get(0)
+                                   );
+                
+                JsonElement je3 = parser.parse(
+                        je2.getAsJsonArray().get(0)
                                 .getAsJsonObject()
                                 .get("steps")
                                 .toString()
                 );
+                String departure = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("start_address").toString(); // 출발지 parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("text").toString()
+                String arrival = parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("end_address").toString(); // 도착지
+                String distance = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("distance").toString()).getAsJsonObject().get("text").toString(); // 거리
+                String duration = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("duration").toString()).getAsJsonObject().get("text").toString(); // 소요 시간
+                String departure_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("departure_time").toString()).getAsJsonObject().get("text").toString(); // 출발 시간
+                String arrival_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("arrival_time").toString()).getAsJsonObject().get("text").toString(); // 예상 도착 시간
                 
-                JsonElement transit_details = parser.parse(
-                        js.getAsJsonArray()
-                                .get(1).
+                Route route = new Route(departure, arrival, distance, duration, departure_time, arrival_time);
+                
+                for (int i = 0; i < je3.getAsJsonArray().size(); i++) {
+                    JsonElement travel_mode = parser.parse(
+                        je3.getAsJsonArray()
+                                .get(i).
                                 getAsJsonObject().
-                                get("transit_details").
+                                get("travel_mode").
                                 toString()
-                );
-                
-                String distance = parser.parse(js.getAsJsonArray().get(1).getAsJsonObject().get("distance").toString()).getAsJsonObject().get("text").toString();
-                String duration = parser.parse(js.getAsJsonArray().get(1).getAsJsonObject().get("duration").toString()).getAsJsonObject().get("text").toString();
-                String arrival = parser.parse(transit_details.getAsJsonObject().get("arrival_stop").toString()).getAsJsonObject().get("name").toString();
-                String arrival_Time = parser.parse(transit_details.getAsJsonObject().get("arrival_time").toString()).getAsJsonObject().get("text").toString();
-                String stop = parser.parse(transit_details.getAsJsonObject().get("departure_stop").toString()).getAsJsonObject().get("name").toString();
-                String stop_Time = parser.parse(transit_details.getAsJsonObject().get("departure_time").toString()).getAsJsonObject().get("text").toString();
-                
-		System.out.println("도착지 : " + arrival + " / 예상 도착 시간 : " + arrival_Time +"("+duration+" 소요)"+ " / 가야하는 버스정류장 : "+ stop + " / 예상 버스 도착 시간 : " + stop_Time);
-                
+                    );
+                    
+                    
+                    String Key = "";
+                    String Value = "";
+                    
+                    switch (travel_mode.toString()) {
+                        case "\"WALKING\"" :
+                            Key = parser.parse(
+                                    je3.getAsJsonArray()
+                                            .get(i)
+                                            .getAsJsonObject()
+                                            .get("html_instructions")
+                                            .toString()
+                            ).toString();
+                            
+                            Value = parser.parse(
+                                    parser.parse(
+                                            je3.getAsJsonArray()
+                                            .get(i)
+                                            .getAsJsonObject()
+                                            .get("duration")
+                                            .toString()
+                            ).toString())
+                                    .getAsJsonObject()
+                                    .get("text")
+                                    .toString();
+                            break;
+                        case "\"TRANSIT\"" :
+                            Key = parser.parse(
+                                    je3.getAsJsonArray()
+                                            .get(i)
+                                            .getAsJsonObject()
+                                            .get("html_instructions")
+                                            .toString()
+                            ).toString();
+                            
+                            Value = parser.parse(
+                                    parser.parse(
+                                            je3.getAsJsonArray()
+                                            .get(i)
+                                            .getAsJsonObject()
+                                            .get("duration")
+                                            .toString()
+                            ).toString())
+                                    .getAsJsonObject()
+                                    .get("text")
+                                    .toString();
+                            break;
+                    }
+                    route.add_route(Key, Value);
+                    
+                    //System.out.println(travel_mode);
+                }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

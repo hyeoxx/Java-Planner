@@ -29,20 +29,15 @@ public class DirectionFactory {
 		url = new URL(urls);
 		
 		con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET"); // 이 부분은 없어도 상관 없음
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"); // 이 부분은 없어도 상관 없음
-		//con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-		// 접속한 홈페이지에서의 정보를 버퍼에 저장
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
 		br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-			
-		// 버퍼에 저장된 내용을 출력
+                
 		String temp;
 		while ((temp = br.readLine()) != null) {
 			text += temp;
                         text += "\n";
 		}
-		
-		//System.out.println(text);
 		
 		JsonParser parser = new JsonParser();
 		JsonElement jsonArray = parser.parse(text);
@@ -51,7 +46,6 @@ public class DirectionFactory {
                 JsonElement js4 = parser.parse(js3.getAsJsonObject().get("location").toString());
                 x = js4.getAsJsonObject().get("lat").toString();
                 y = js4.getAsJsonObject().get("lng").toString();
-                //System.out.println(js2.getAsJsonArray().get(0).getAsJsonObject().get("geometry"));
 		
 		
 		ret = new point(x, y);
@@ -59,6 +53,7 @@ public class DirectionFactory {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+                
 		return ret;
 	}
 }
