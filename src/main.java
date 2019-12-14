@@ -1,12 +1,18 @@
+import contents.Notification;
+import contents.Plan;
 import directions.DirectionFactory;
 import directions.point;
 import directions.Direction;
 import directions.Route;
+import gui.CalendarGui;
+import gui.PlanGui;
+import java.util.HashMap;
+import java.util.Map;
 
 public class main {
         public static Route route;
-        
-	public static void main(String[] args) {
+        // 20191214
+	public static void main(String[] args) {/*
 		point a = DirectionFactory.searchPosition("백석대학교"); // 출발지 입력
 		point b = DirectionFactory.searchPosition("서울대"); // 도착지 입력
                 Direction dir = new Direction("ㅇㅇ", a, "dd", b);
@@ -21,7 +27,9 @@ public class main {
                 System.out.println("--------------루트------------");
                 for (int i = 0; i < route.getRoutes().size(); i++) {
                     System.out.println((i+1)+". " + route.getRoutes().get(i).split("/")[0] + " ("+route.getRoutes().get(i).split("/")[1]+" 소요)");
-                }
+                }*/
+                CalendarGui gui = new CalendarGui();
+                Notification note = new Notification();
+                note.displayTray("플래너가 준비되었습니다.", "Gava Planner");
 	}
-
 }

@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import contents.setting;
+import contents.Content;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +35,7 @@ public class Direction {
 		String text = "";
                 Route route = null;
                 
-		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&language=ko&key="+setting.key;
+		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&language=ko&key="+Content.key;
 		try {
 		url = new URL(urls);
 		

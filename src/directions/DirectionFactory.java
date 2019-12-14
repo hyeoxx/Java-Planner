@@ -1,6 +1,6 @@
 package directions;
 
-import contents.setting;
+import contents.Content;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,7 +23,7 @@ public class DirectionFactory {
 		String x = "", y = "";
 		String text = "";
 		point ret = null;
-		String urls = "https://maps.googleapis.com/maps/api/geocode/json?address="+v1+",+CA&key="+setting.key;
+		String urls = "https://maps.googleapis.com/maps/api/geocode/json?address="+v1+",+CA&key="+Content.key;
 		try {
 			
 		url = new URL(urls);
