@@ -32,6 +32,10 @@ public class Route {
         this.arrival_time = arrival_time_;
     }
     
+    public Route() {
+        
+    }
+    
     public void add_route(String v1) {
         routes.add(v1);
     }

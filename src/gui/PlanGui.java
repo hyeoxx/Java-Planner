@@ -9,6 +9,7 @@ import contents.Plan;
 import directions.Route;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,16 +17,16 @@ import javax.swing.DefaultListModel;
  */
 public class PlanGui extends javax.swing.JFrame {
 
-    private ArrayList<Plan> plans = new ArrayList<Plan>();
+    public ArrayList<Plan> plans = new ArrayList<Plan>();
+    ModifyPlanGui mpg;
     
     /**
      * Creates new form Plan
      */
     int year, month, day;
-    
+    DefaultListModel<String> model;
     public PlanGui() {
         initComponents();
-        jLabel1.setText("선택된 날짜 : "+year+"년 "+month+"월 "+day+"일");
     }
     
     public void setDate(int year_, int month_, int day_, ArrayList<Plan> plans_) {
@@ -33,11 +34,22 @@ public class PlanGui extends javax.swing.JFrame {
         month = month_;
         day = day_;
         plans = plans_;
-        DefaultListModel<String> a = new DefaultListModel<>();
+        model = new DefaultListModel<>();
         for (int i = 0; i < plans.size(); i++)
-            a.addElement(plans.get(i).name);
-        jList1.setModel(a);
+            model.addElement("<"+plans.get(i).time.split("/")[0]+"시 " + plans.get(i).time.split("/")[1] + "분> "+plans.get(i).name);
+        jList1.setModel(model);
         jLabel1.setText("선택된 날짜 : "+year+"년 "+month+"월 "+day+"일");
+        setTitle(year+"년 "+month+"월 "+day+"일"+"의 일정");
+    }
+    
+    public void setJListModel(int index, String a) {
+        model.set(index, a);
+        jList1.setModel(model);
+    }
+    
+    public void addJListModel(Plan p) {
+                //pg.setJListModel(index, "<"+String.valueOf(this.jComboBox1.getSelectedIndex() + 1)+"시 " + String.valueOf(this.jComboBox2.getSelectedIndex()) + "분> "+this.jTextField1.getText());
+        model.addElement("<"+p.time.split("/")[0]+"시 " + p.time.split("/")[1] + "분> "+p.name);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,6 +72,11 @@ public class PlanGui extends javax.swing.JFrame {
 
         jButton1.setText("일정 추가");
         jButton1.setActionCommand("일정 추가");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("jLabel1");
 
@@ -78,6 +95,11 @@ public class PlanGui extends javax.swing.JFrame {
         });
 
         jButton3.setText("일정 수정");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,6 +149,22 @@ public class PlanGui extends javax.swing.JFrame {
             plans.remove(selectedIndex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (!jList1.isSelectionEmpty()) {
+            mpg = new ModifyPlanGui("수정", this, jList1.getSelectedIndex(), (year+"년 "+month+"월 "+day+"일"), plans.get(jList1.getSelectedIndex()).name, plans.get(jList1.getSelectedIndex()).content, Integer.parseInt(plans.get(jList1.getSelectedIndex()).time.split("/")[0]), Integer.parseInt(plans.get(jList1.getSelectedIndex()).time.split("/")[1]), plans.get(jList1.getSelectedIndex()).route);
+            mpg.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "수정할 일정을 선택해주세요!", "Planner", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+            mpg = new ModifyPlanGui("추가", this, -1, "", "", "", 1, 0, null);
+            mpg.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

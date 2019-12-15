@@ -115,7 +115,7 @@ public class CalendarGui extends JFrame implements ActionListener{
             centerPane.add(datePane, "Center");
             add(centerPane, "Center");
 
-            setSize(400, 300);
+            setSize(600, 500);
             setVisible(true);
 
             prevBtn.addActionListener(this);
@@ -178,15 +178,17 @@ public class CalendarGui extends JFrame implements ActionListener{
 		}else if(outWeek==7){
 			lbl.setForeground(Color.BLUE);
 		}
-                ArrayList<Plan> temp = new ArrayList<Plan>();
-                temp.add(new Plan(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(Integer.parseInt(lbl.getText()) < 10 ? "0"+Integer.parseInt(lbl.getText()) : Integer.parseInt(lbl.getText())))+"", "Dd", null));
-                temp.add(new Plan("ddas", "Ddas", null));
-                Content.Plans.put(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(Integer.parseInt(lbl.getText()) < 10 ? "0"+Integer.parseInt(lbl.getText()) : Integer.parseInt(lbl.getText()))), temp);
+                lbl.setText("<html>"+i+"<br>일정있음</html>");
+                int d = Integer.parseInt(lbl.getText().contains("<br>일정있음") ? lbl.getText().split("<br>일정있음")[0].split("<html>")[1] : lbl.getText());
+                if (!Content.Plans.containsKey(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)))) {
+                    ArrayList<Plan> temp = new ArrayList<Plan>();
+                    Content.Plans.put(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)), temp);
+                }
                 lbl.addMouseListener(new MouseAdapter()  
                     {  
                         public void mouseClicked(MouseEvent e)  
                         {
-                            pg.setDate(y, m, Integer.parseInt(lbl.getText()), Content.Plans.get(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(Integer.parseInt(lbl.getText()) < 10 ? "0"+Integer.parseInt(lbl.getText()) : Integer.parseInt(lbl.getText())))));
+                            pg.setDate(y, m, d, Content.Plans.get(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d))));
                             pg.setVisible(true);
                         }  
                     }); 

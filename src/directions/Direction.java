@@ -36,7 +36,8 @@ public class Direction {
                 Route route = null;
                 
 		String urls = "https://maps.googleapis.com/maps/api/directions/json?origin="+originPos.x+","+originPos.y+"&destination="+destPos.x+","+destPos.y+"&mode=transit&departure_time=now&language=ko&key="+Content.key;
-		try {
+                urls = urls.replaceAll(" ", "%20");
+                try {
 		url = new URL(urls);
 		
 		con = (HttpURLConnection) url.openConnection();

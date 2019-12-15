@@ -18,10 +18,12 @@ public class Plan {
     public String name = "";
     public String content = "";
     public Route route = null;
+    public String time = ""; // hour/min split("/")
     
-    public Plan(String name_, String content_, Route route_) {
+    public Plan(String name_, String content_, Route route_, String time_) {
         name = name_;
         content = content_;
         route = route_;
+        time = time_;
     }
 }
