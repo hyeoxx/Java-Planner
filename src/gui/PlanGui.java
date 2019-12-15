@@ -162,7 +162,7 @@ public class PlanGui extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-            mpg = new ModifyPlanGui("추가", this, -1, "", "", "", 1, 0, null);
+            mpg = new ModifyPlanGui("추가", this, -1, (year+"년 "+month+"월 "+day+"일"), "", "", 1, 0, null);
             mpg.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

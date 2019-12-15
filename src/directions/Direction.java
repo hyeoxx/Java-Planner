@@ -77,7 +77,7 @@ public class Direction {
                 String departure_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("departure_time").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 출발 시간
                 String arrival_time = parser.parse(parser.parse(je2.getAsJsonArray().get(0).toString()).getAsJsonObject().get("arrival_time").toString()).getAsJsonObject().get("text").toString().replaceAll("\"", ""); // 예상 도착 시간
                 
-                route = new Route(departure, arrival, distance, duration, departure_time, arrival_time);
+                route = new Route(departure, arrival, distance, duration, departure_time, arrival_time, null);
                 
                 for (int i = 0; i < je3.getAsJsonArray().size(); i++) {
                     JsonElement travel_mode = parser.parse(

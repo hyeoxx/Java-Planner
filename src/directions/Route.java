@@ -23,13 +23,14 @@ public class Route {
     //public Map<String, String> routes = new HashMap<String, String>(); // Key 어디로 어떻게 가는지, Value 예상 소요 시간
     public ArrayList<String> routes = new ArrayList<>();
     
-    public Route(String departure_, String arrival_, String distance_, String duration_, String departure_time_, String arrival_time_) {
+    public Route(String departure_, String arrival_, String distance_, String duration_, String departure_time_, String arrival_time_, ArrayList<String> routes_) {
         this.departure = departure_;
         this.arrival = arrival_;
         this.distance = distance_;
         this.duration = duration_;
         this.departure_time = departure_time_;
         this.arrival_time = arrival_time_;
+        routes = routes_;
     }
     
     public Route() {

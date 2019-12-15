@@ -5,8 +5,10 @@
  */
 package gui;
 
+import contents.Content;
 import contents.Plan;
 import directions.Route;
+import files.WriteJson;
 
 /**
  *
@@ -33,7 +35,14 @@ public class ModifyPlanGui extends javax.swing.JFrame {
         this.index = index_;
         this.pg = pg_;
         if (route_ != null) {
-            jTextArea1.setEnabled(false);
+            String text = "<대중교통 이용>\r\n";
+            text += "출발지 : "+route_.departure + "\r\n";
+            text += "도착지 : "+route_.arrival+"\r\n";
+            text += "총 소요 시간 : "+route_.duration+"\r\n";
+        
+            for (int i = 0; i < route_.routes.size(); i++)
+                text += (i + 1) +". "+route_.routes.get(i).split("/")[0]+" ("+route_.routes.get(i).split("/")[1]+"분 소요)\r\n";
+            jTextArea1.setText(text);
         }
         route = route_;
     }
@@ -48,7 +57,6 @@ public class ModifyPlanGui extends javax.swing.JFrame {
             text += (i + 1) +". "+a.routes.get(i).split("/")[0]+" ("+a.routes.get(i).split("/")[1]+"분 소요)\r\n";
         
         this.jTextArea1.setText(text);
-        jTextArea1.setEnabled(false);
         route = a;
     }
     
@@ -203,23 +211,33 @@ public class ModifyPlanGui extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        int y = -1, m = -1, d = -1;
         switch (mode) {
             case "추가" :
                 Plan p = new Plan(this.jTextField1.getText(), this.jTextArea1.getText(), route, String.valueOf(this.jComboBox1.getSelectedIndex() + 1) + "/" + String.valueOf(this.jComboBox2.getSelectedIndex()));
                 pg.plans.add(p);
+                //year+"년 "+month+"월 "+day+"일"
+                y = Integer.parseInt(this.jLabel1.getText().split("년 ")[0]);
+                m = Integer.parseInt(this.jLabel1.getText().split("년 ")[1].split("월 ")[0]);
+                d = Integer.parseInt(this.jLabel1.getText().split("년 ")[1].split("월 ")[1].split("일")[0]);
+                Content.Plans.replace(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)), pg.plans);
                 pg.addJListModel(p);
+                WriteJson.write(Content.Plans);
                 this.dispose();
             break;
             case "수정" :
                 pg.plans.get(index).name = this.jTextField1.getText();
                 pg.plans.get(index).content = this.jTextArea1.getText();
                 pg.plans.get(index).time = String.valueOf(this.jComboBox1.getSelectedIndex() + 1) + "/" + String.valueOf(this.jComboBox2.getSelectedIndex());
+                Content.Plans.replace(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)), pg.plans);
                 pg.setJListModel(index, "<"+String.valueOf(this.jComboBox1.getSelectedIndex() + 1)+"시 " + String.valueOf(this.jComboBox2.getSelectedIndex()) + "분> "+this.jTextField1.getText());
         
                 this.dispose();
             break;
             
         }
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

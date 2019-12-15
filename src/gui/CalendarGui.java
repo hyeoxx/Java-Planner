@@ -122,6 +122,8 @@ public class CalendarGui extends JFrame implements ActionListener{
             nextBtn.addActionListener(this);
             yearCombo.addActionListener(this);
             monthCombo.addActionListener(this);
+            
+            Content.mainFrame = this;
 	}
 
 	//Overring
@@ -161,7 +163,7 @@ public class CalendarGui extends JFrame implements ActionListener{
             datePane.setVisible(true);	//패널 재출력
 	}
         
-	public void dayPrint(int y, int m){
+	public void dayPrint(int y, int m) {
             Calendar cal = Calendar.getInstance();
             cal.set(y, m-1, 1);	//출력할 첫날의 객체 만든다.
             int week = cal.get(Calendar.DAY_OF_WEEK);	//1일에 대한 요일	일요일 : 0
@@ -178,9 +180,11 @@ public class CalendarGui extends JFrame implements ActionListener{
 		}else if(outWeek==7){
 			lbl.setForeground(Color.BLUE);
 		}
-                lbl.setText("<html>"+i+"<br>일정있음</html>");
+                
                 int d = Integer.parseInt(lbl.getText().contains("<br>일정있음") ? lbl.getText().split("<br>일정있음")[0].split("<html>")[1] : lbl.getText());
-                if (!Content.Plans.containsKey(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)))) {
+                if (Content.Plans.containsKey(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d))) && !Content.Plans.get(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d))).isEmpty()) {
+                    lbl.setText("<html>"+i+"<br>일정있음</html>");
+                } else {
                     ArrayList<Plan> temp = new ArrayList<Plan>();
                     Content.Plans.put(Integer.parseInt(y+""+(m < 10 ? "0"+m : m)+""+(d < 10 ? "0"+d : d)), temp);
                 }
